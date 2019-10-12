@@ -1,8 +1,9 @@
 import React, { useReducer, useEffect } from 'react';
 import { Box } from '@chakra-ui/core';
 import Search from '../Search';
-import gqlQuery from '../../api';
+import RepositoriesList from '../RepositoriesList';
 
+import gqlQuery from '../../api';
 import { getLicenses, searchRepositories } from '../../queries';
 
 const initialState = {
@@ -89,8 +90,8 @@ function SearchRepositories() {
         handleChangeLicenseType={handleChangeLicenseType}
         handleSearch={handleSearch}
       />
-      {/* <RepositoriesList />
-      <Pagination /> */}
+      <RepositoriesList fetch={state.fetchRepositories} repositories={state.repositories} />
+      {/* <Pagination /> */}
     </Box>
   );
 }

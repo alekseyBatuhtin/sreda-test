@@ -13,7 +13,7 @@ const Search = ({
   handleChangeLicenseType,
   handleSearch,
 }) => (
-  <Box display="flex" paddingX="20px" paddingY="12px">
+  <Box display="flex" paddingX="20px" paddingY="12px" borderBottomWidth="1px">
     <Input value={query} onChange={handleChangeQuery} flexGrow="1" placeholder="Search..." />
     <Select
       placeholder="License type"
@@ -27,7 +27,7 @@ const Search = ({
       {licenses.map((license) => (
         <option
           key={license.id}
-          value={license.id}
+          value={license.key}
         >
           {license.name}
         </option>

@@ -3,6 +3,7 @@ query Licenses {
   licenses {
     id
     name
+    key
   }
 }
 `;
@@ -20,8 +21,13 @@ query SearchRepository($querySearch: String!) {
       ... on Repository {
         id
         name
+        description
+        url
         owner {
           login
+        }
+        licenseInfo {
+          name
         }
         stargazers {
           totalCount
@@ -30,7 +36,6 @@ query SearchRepository($querySearch: String!) {
           totalCount
         }
         createdAt
-        updatedAt
       }
     }
   }
