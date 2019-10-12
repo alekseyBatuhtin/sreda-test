@@ -12,7 +12,8 @@
     "graphql-tag": "^2.10.1",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {
     "eslint": "^6.4.0",
