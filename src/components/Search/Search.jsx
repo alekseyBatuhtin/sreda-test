@@ -6,7 +6,12 @@ import {
 } from '@chakra-ui/core';
 
 const Search = ({
-  query, handleChangeQuery, licenseType, licenses, handleChangeLicenseType,
+  query,
+  handleChangeQuery,
+  licenseType,
+  licenses,
+  handleChangeLicenseType,
+  handleSearch,
 }) => (
   <Box display="flex" paddingX="20px" paddingY="12px">
     <Input value={query} onChange={handleChangeQuery} flexGrow="1" placeholder="Search..." />
@@ -28,7 +33,7 @@ const Search = ({
         </option>
       ))}
     </Select>
-    <Button marginLeft="8px" width="120px">Submit</Button>
+    <Button onClick={handleSearch} marginLeft="8px" width="120px">Submit</Button>
   </Box>
 );
 
@@ -41,6 +46,7 @@ Search.propTypes = {
     name: PropTypes.string,
   })).isRequired,
   licenseType: PropTypes.string.isRequired,
+  handleSearch: PropTypes.func.isRequired,
 };
 
 export default Search;
