@@ -36,6 +36,7 @@ const RepositoriesList = ({ fetch, repositories }) => (
           url={repository.url}
           licenseInfo={repository.licenseInfo}
           starsCount={repository.stargazers.totalCount}
+          forkCount={repository.forks.totalCount}
           createdAt={repository.createdAt}
           updatedAt={repository.updatedAt}
         />
