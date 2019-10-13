@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Spinner } from '@chakra-ui/core';
+import { Box, Spinner, Text } from '@chakra-ui/core';
 
 import RepositoryItem from '../RepositoryItem';
 
@@ -41,7 +41,16 @@ const RepositoriesList = ({ fetch, repositories }) => (
           updatedAt={repository.updatedAt}
         />
       ))
-      : 'No data'}
+      : (
+        <Text
+          margin="20px auto"
+          fontWeight="500"
+          fontSize="25px"
+          color="gray.600"
+        >
+          No data
+        </Text>
+      )}
   </Box>
 );
 
