@@ -13,16 +13,26 @@ const Search = ({
   handleChangeLicenseType,
   handleSearch,
 }) => (
-  <Box display="flex" paddingX="20px" paddingY="12px" borderBottomWidth="1px">
-    <Input value={query} onChange={handleChangeQuery} flexGrow="1" placeholder="Search..." />
+  <Box display="flex" paddingX="20px" paddingY="12px" borderBottomWidth="1px" flexWrap="wrap">
+    <Input
+      value={query}
+      onChange={handleChangeQuery}
+      minWidth="280px"
+      flexBasis="45%"
+      flexGrow="1"
+      placeholder="Search..."
+      marginBottom="8px"
+    />
     <Select
       placeholder="License type"
       selectProps={
         { onChange: handleChangeLicenseType }
       }
       value={licenseType}
-      marginLeft="8px"
-      width="300px"
+      flexBasis="45%"
+      flexGrow="1"
+      minWidth="280px"
+      marginBottom="8px"
     >
       {licenses.map((license) => (
         <option
@@ -33,7 +43,7 @@ const Search = ({
         </option>
       ))}
     </Select>
-    <Button onClick={handleSearch} marginLeft="8px" width="120px">Submit</Button>
+    <Button onClick={handleSearch} flexGrow="1">Submit</Button>
   </Box>
 );
 

@@ -13,17 +13,17 @@ const RepositoryItem = ({
   url,
   licenseInfo,
   starsCount,
-  updatedAt,
   createdAt,
 }) => (
   <Box
     borderWidth="1px"
     rounded="lg"
     width="30%"
-    minWidth="350px"
+    minWidth="280px"
     marginBottom="20px"
     marginX="10px"
     padding="8px"
+    flexBasis="30%"
     flexGrow="1"
   >
     <Link href={url} color="#0366d6" fontSize="lg">
@@ -57,13 +57,14 @@ const RepositoriesList = ({ fetch, repositories }) => (
     overflow="auto"
   >
     {fetch && (
-      <Spinner
-        size="xl"
-        position="absolute"
-        left="50%"
-        top="50%"
-        transform="transition(-50%, -50%)"
-      />
+      <Box position="absolute" top="0" left="0" right="0" bottom="0" bg="white" opacity="0.7">
+        <Spinner
+          size="xl"
+          position="absolute"
+          left="calc(50% - 22px)"
+          top="calc(50% - 22px)"
+        />
+      </Box>
     )}
     {repositories.length
       ? repositories.map((repository) => (
@@ -91,7 +92,6 @@ RepositoriesList.propTypes = {
       name: PropTypes.string.isRequired,
       description: PropTypes.string,
       createdAt: PropTypes.string.isRequired,
-      updatedAt: PropTypes.string.isRequired,
       owner: PropTypes.shape({
         login: PropTypes.string,
       }).isRequired,
