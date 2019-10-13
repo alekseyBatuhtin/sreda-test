@@ -8,12 +8,15 @@
     "@emotion/styled": "^10.0.17",
     "apollo-boost": "^0.4.4",
     "emotion-theming": "^10.0.19",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "graphql": "^14.5.7",
     "graphql-tag": "^2.10.1",
+    "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "3.2.0",
-    "prop-types": "^15.7.2"
+    "react-test-renderer": "^16.10.2"
   },
   "devDependencies": {
     "eslint": "^6.4.0",
