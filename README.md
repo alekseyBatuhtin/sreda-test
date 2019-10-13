@@ -1,3 +1,13 @@
+# Start app
+
+```bash
+git clone git@github.com:alekseyBatuhtin/sreda-test.git
+cd sreda-test
+npm install
+npm run start
+```
+Открыть http://localhost:3000/ в браузере
+
 # Roadmap
 
 ## Common tasks
@@ -8,7 +18,7 @@
 
 ## Additional tasks
 
-4. Покрыть код тестами (#task4). Первоначально бизнес-логику, потом UI.
+4. (Done) Покрыть код тестами (#task4). Первоначально бизнес-логику, потом UI.
 5. Реализовать серверную пагинацию (#task5).
 6. (Done) Добавить индикатор загрузки данных (#task6).
 7. (Done) Responsive до 320px (#task7).

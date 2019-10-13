@@ -14,7 +14,7 @@ const initialState = {
   fetchRepositories: false,
 };
 
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
   switch (action.type) {
     case 'HANDLE_CHANGE_QUERY':
       return { ...state, query: action.payload };
@@ -35,8 +35,7 @@ const reducer = (state, action) => {
   }
 };
 
-const genMonthAgoDate = () => {
-  const date = new Date();
+export const genMonthAgoDate = (date = new Date()) => {
   const year = date.getFullYear();
   const month = `${date.getUTCMonth() + 1 - 1}`.padStart(2, 0);
   const day = `${date.getUTCDate()}`.padStart(2, 0);
