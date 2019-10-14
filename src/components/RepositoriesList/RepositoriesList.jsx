@@ -11,7 +11,6 @@ const RepositoriesList = ({ fetch, repositories }) => (
     flexDirection="row"
     justifyContent="flex-start"
     flexWrap="wrap"
-    height="100%"
     paddingX="12px"
     paddingTop="12px"
     overflow="auto"

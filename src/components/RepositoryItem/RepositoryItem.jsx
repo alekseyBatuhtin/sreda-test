@@ -25,10 +25,9 @@ const RepositoryItem = ({
     marginX="10px"
     padding="8px"
     flexBasis="30%"
-    flexGrow="1"
   >
-    <Link href={url} color="#0366d6" fontSize="lg">
-      <Text>
+    <Link href={url} color="#0366d6" fontSize="lg" title={`${login}/${name}`}>
+      <Text whiteSpace="nowrap" overflow="hidden" textOverflow="ellipsis">
         <Box as={RepoIcon} display="inline" marginRight="8px" />
         {`${login}/${name}`}
       </Text>
