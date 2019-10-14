@@ -22,3 +22,8 @@ npm run start
 5. (Done) Реализовать серверную пагинацию (#task5).
 6. (Done) Добавить индикатор загрузки данных (#task6).
 7. (Done) Responsive до 320px (#task7).
+
+## Bugfix, refactor
+8. Добавить обработку ошибок
+9. genMonthAgoDate, genSearchQuery вынести в utils
+10. Слишком длинные названия репозиториев вываливаются из блока
