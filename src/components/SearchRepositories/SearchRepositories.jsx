@@ -2,6 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { Box } from '@chakra-ui/core';
 import Search from '../Search';
 import RepositoriesList from '../RepositoriesList';
+import Pagination from '../Pagination';
 
 import gqlQuery from '../../api';
 import { getLicenses, searchRepositories } from '../../queries';
@@ -12,6 +13,12 @@ const initialState = {
   licenses: [],
   repositories: [],
   fetchRepositories: false,
+  pagination: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: null,
+    endCursor: null,
+  },
 };
 
 export const reducer = (state, action) => {
@@ -27,7 +34,8 @@ export const reducer = (state, action) => {
     case 'FETCH_REPOSITORIES_SUCCESS':
       return {
         ...state,
-        repositories: action.payload,
+        repositories: action.payload.repositories,
+        pagination: action.payload.pagination,
         fetchRepositories: false,
       };
     default:
@@ -43,9 +51,10 @@ export const genMonthAgoDate = (date = new Date()) => {
   return `${year}-${month}-${day}`;
 };
 
+export const genSearchQuery = (query, licenseType) => `${query} ${licenseType ? `license:${licenseType}` : ''} created:>${genMonthAgoDate()} language:JavaScript sort:stars `;
+
 function SearchRepositories() {
   const [state, dispatch] = useReducer(reducer, initialState);
-
   useEffect(() => {
     gqlQuery({ query: getLicenses })
       .then((response) => {
@@ -67,13 +76,41 @@ function SearchRepositories() {
     gqlQuery({
       query: searchRepositories,
       variables: {
-        querySearch: `${state.query} ${state.licenseType ? `license:${state.licenseType}` : ''} created:>${genMonthAgoDate()} language:JavaScript sort:stars `,
+        querySearch: genSearchQuery(state.query, state.licenseType),
+        first: 20,
       },
     })
       .then((response) => {
         dispatch({
           type: 'FETCH_REPOSITORIES_SUCCESS',
-          payload: response.search.nodes,
+          payload: {
+            repositories: response.search.nodes,
+            pagination: response.search.pageInfo,
+          },
+        });
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleChangePage = (direction) => () => {
+    dispatch({ type: 'FETCH_REPOSITORIES' });
+    gqlQuery({
+      query: searchRepositories,
+      variables: {
+        querySearch: genSearchQuery(state.query, state.licenseType),
+        after: direction === 'next' ? state.pagination.endCursor : null,
+        first: direction === 'next' ? 20 : null,
+        before: direction === 'prev' ? state.pagination.startCursor : null,
+        last: direction === 'prev' ? 20 : null,
+      },
+    })
+      .then((response) => {
+        dispatch({
+          type: 'FETCH_REPOSITORIES_SUCCESS',
+          payload: {
+            repositories: response.search.nodes,
+            pagination: response.search.pageInfo,
+          },
         });
       })
       .catch((err) => console.error(err));
@@ -90,7 +127,11 @@ function SearchRepositories() {
         handleSearch={handleSearch}
       />
       <RepositoriesList fetch={state.fetchRepositories} repositories={state.repositories} />
-      {/* <Pagination /> */}
+      <Pagination
+        hasPreviousPage={state.pagination.hasPreviousPage}
+        hasNextPage={state.pagination.hasNextPage}
+        handleChangePage={handleChangePage}
+      />
     </Box>
   );
 }

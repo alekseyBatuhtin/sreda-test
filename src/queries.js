@@ -9,10 +9,10 @@ query Licenses {
 `;
 
 export const searchRepositories = `
-query SearchRepository($querySearch: String!) {
-  search(query: $querySearch, type: REPOSITORY, first: 20) {
-    repositoryCount
+query SearchRepository($querySearch: String!, $after: String, $before: String, $first: Int, $last: Int) {
+  search(query: $querySearch, type: REPOSITORY, before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
+      startCursor
       endCursor
       hasNextPage
       hasPreviousPage

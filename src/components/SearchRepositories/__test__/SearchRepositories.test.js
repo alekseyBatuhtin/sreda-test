@@ -26,14 +26,21 @@ describe('SearchRepositories test', () => {
       });
     });
     test('Repos fetching success', () => {
-      const repos = [1, 2, 3];
-      const newState = reducer({ fetchRepositories: true, repositories: [] }, {
+      const payload = {
+        repositories: [1, 2, 3],
+        pagination: {
+          hasNextPage: false,
+          hasPreviosPage: false,
+        },
+      };
+      const newState = reducer({ fetchRepositories: true, repositories: [], pagination: {} }, {
         type: 'FETCH_REPOSITORIES_SUCCESS',
-        payload: repos,
+        payload,
       });
       expect(newState).toEqual({
         fetchRepositories: false,
-        repositories: repos,
+        repositories: payload.repositories,
+        pagination: payload.pagination,
       });
     });
   });
