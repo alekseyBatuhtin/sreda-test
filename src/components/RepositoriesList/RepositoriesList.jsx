@@ -17,7 +17,7 @@ const RepositoriesList = ({ fetch, repositories }) => (
     overflow="auto"
   >
     {fetch && (
-      <Box position="absolute" top="0" left="0" right="0" bottom="0" bg="white" opacity="0.7">
+      <Box position="fixed" top="0" left="0" right="0" bottom="0" bg="white" opacity="0.7">
         <Spinner
           size="xl"
           position="absolute"
