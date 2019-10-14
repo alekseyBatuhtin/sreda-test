@@ -24,6 +24,6 @@ npm run start
 7. (Done) Responsive до 320px (#task7).
 
 ## Bugfix, refactor
-8. Добавить обработку ошибок
+8. (Done) Добавить обработку ошибок
 9. (Done) genMonthAgoDate, genSearchQuery вынести в utils
 10. Слишком длинные названия репозиториев вываливаются из блока

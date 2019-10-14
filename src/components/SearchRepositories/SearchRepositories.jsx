@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from 'react';
-import { Box } from '@chakra-ui/core';
+import { Box, useToast } from '@chakra-ui/core';
 import Search from '../Search';
 import RepositoriesList from '../RepositoriesList';
 import Pagination from '../Pagination';
@@ -39,6 +39,9 @@ export const reducer = (state, action) => {
         pagination: action.payload.pagination,
         fetchRepositories: false,
       };
+    case 'FETCH_REPOSITORIES_FAIL': {
+      return { ...state, fetchRepositories: false };
+    }
     default:
       return state;
   }
@@ -46,6 +49,8 @@ export const reducer = (state, action) => {
 
 function SearchRepositories() {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const toast = useToast();
+
   useEffect(() => {
     gqlQuery({ query: getLicenses })
       .then((response) => {
@@ -57,6 +62,16 @@ function SearchRepositories() {
       .catch((err) => console.error(err));
   }, []);
 
+  const handleDispatchError = (err) => {
+    dispatch({ type: 'FETCH_REPOSITORIES_FAIL' });
+    toast({
+      title: 'Error.',
+      description: err.message,
+      status: 'error',
+      duration: 5000,
+      isClosable: true,
+    });
+  };
   const handleChangeQuery = (event) => dispatch({ type: 'HANDLE_CHANGE_QUERY', payload: event.target.value });
   const handleChangeLicenseType = (event) => dispatch({
     type: 'HANDLE_CHANGE_LICENSE_TYPE',
@@ -80,7 +95,7 @@ function SearchRepositories() {
           },
         });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => handleDispatchError(err));
   };
 
   const handleChangePage = (direction) => () => {
@@ -104,7 +119,7 @@ function SearchRepositories() {
           },
         });
       })
-      .catch((err) => console.error(err));
+      .catch((err) => handleDispatchError(err));
   };
 
   return (
