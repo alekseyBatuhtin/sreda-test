@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import { ThemeProvider } from '@chakra-ui/core';
 
 
-import SearchRepositories, { reducer, genMonthAgoDate } from '../SearchRepositories';
+import SearchRepositories, { reducer } from '../SearchRepositories';
 
 describe('SearchRepositories test', () => {
   test('SearchRepositories render', () => {
@@ -43,14 +43,5 @@ describe('SearchRepositories test', () => {
         pagination: payload.pagination,
       });
     });
-  });
-});
-
-describe('genMonthAgoDate test', () => {
-  test('without args', () => {
-    expect(genMonthAgoDate()).toEqual(expect.any(String));
-  });
-  test('Parse is correct', () => {
-    expect(genMonthAgoDate(new Date(2018, 1, 2))).toEqual('2018-01-01');
   });
 });

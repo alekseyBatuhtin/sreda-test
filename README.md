@@ -25,5 +25,5 @@ npm run start
 
 ## Bugfix, refactor
 8. Добавить обработку ошибок
-9. genMonthAgoDate, genSearchQuery вынести в utils
+9. (Done) genMonthAgoDate, genSearchQuery вынести в utils
 10. Слишком длинные названия репозиториев вываливаются из блока
