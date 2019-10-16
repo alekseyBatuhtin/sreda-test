@@ -27,3 +27,4 @@ npm run start
 8. (Done) Добавить обработку ошибок
 9. (Done) genMonthAgoDate, genSearchQuery вынести в utils
 10. (Done)Слишком длинные названия репозиториев вываливаются из блока
+11. (Done) Переписать на @apollo/react-hooks

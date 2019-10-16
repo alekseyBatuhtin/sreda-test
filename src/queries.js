@@ -1,4 +1,6 @@
-export const getLicenses = `
+import gql from 'graphql-tag';
+
+export const getLicenses = gql`
 query Licenses {
   licenses {
     id
@@ -8,7 +10,7 @@ query Licenses {
 }
 `;
 
-export const searchRepositories = `
+export const searchRepositories = gql`
 query SearchRepository($querySearch: String!, $after: String, $before: String, $first: Int, $last: Int) {
   search(query: $querySearch, type: REPOSITORY, before: $before, after: $after, first: $first, last: $last) {
     pageInfo {
@@ -18,7 +20,7 @@ query SearchRepository($querySearch: String!, $after: String, $before: String, $
       hasPreviousPage
     }
     nodes {
-      ... on Repository {
+      ... on Repository @client {
         id
         name
         description

@@ -1,22 +1,22 @@
-import ApolloClient from 'apollo-boost';
-import gql from 'graphql-tag';
+import { ApolloClient } from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http';
 
 const token = process.env.REACT_APP_GITHUB_TOKEN || '';
 
-const client = new ApolloClient({
+const cache = new InMemoryCache();
+const link = new HttpLink({
   uri: 'https://api.github.com/graphql',
   headers: {
     Authorization: `bearer ${token}`,
   },
 });
 
-const gqlQuery = ({ query, variables, context }) => client
-  .query({
-    query: gql(query),
-    fetchPolicy: 'network-only',
-    variables,
-    context,
-  })
-  .then((result) => result.data);
 
-export default gqlQuery;
+const client = new ApolloClient({
+  cache,
+  link,
+  resolvers: {},
+});
+
+export default client;

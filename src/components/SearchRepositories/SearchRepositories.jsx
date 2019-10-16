@@ -1,141 +1,79 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useLazyQuery } from '@apollo/react-hooks';
+
 import { Box, useToast } from '@chakra-ui/core';
-import Search from '../Search';
+import get from 'lodash.get';
+
+import SearchHeader from '../SearchHeader';
 import RepositoriesList from '../RepositoriesList';
 import Pagination from '../Pagination';
 
-import gqlQuery from '../../api';
-import { getLicenses, searchRepositories } from '../../queries';
+import { searchRepositories } from '../../queries';
 import { genSearchQuery } from '../../utils';
 
-const initialState = {
-  query: '',
-  licenseType: '',
-  licenses: [],
-  repositories: [],
-  fetchRepositories: false,
-  pagination: {
-    hasNextPage: false,
-    hasPreviousPage: false,
-    startCursor: null,
-    endCursor: null,
-  },
-};
-
-export const reducer = (state, action) => {
-  switch (action.type) {
-    case 'HANDLE_CHANGE_QUERY':
-      return { ...state, query: action.payload };
-    case 'HANDLE_CHANGE_LICENSE_TYPE':
-      return { ...state, licenseType: action.payload };
-    case 'FETCH_LICENSES_SUCCESS':
-      return { ...state, licenses: action.payload };
-    case 'FETCH_REPOSITORIES':
-      return { ...state, fetchRepositories: true };
-    case 'FETCH_REPOSITORIES_SUCCESS':
-      return {
-        ...state,
-        repositories: action.payload.repositories,
-        pagination: action.payload.pagination,
-        fetchRepositories: false,
-      };
-    case 'FETCH_REPOSITORIES_FAIL': {
-      return { ...state, fetchRepositories: false };
-    }
-    default:
-      return state;
-  }
-};
-
 function SearchRepositories() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [query, setQuery] = useState('');
+  const [licenseType, setLicenseType] = useState('');
   const toast = useToast();
 
-  useEffect(() => {
-    gqlQuery({ query: getLicenses })
-      .then((response) => {
-        dispatch({
-          type: 'FETCH_LICENSES_SUCCESS',
-          payload: response.licenses,
-        });
-      })
-      .catch((err) => console.error(err));
-  }, []);
+  const handleChangeQuery = (event) => setQuery(event.target.value);
+  const handleChangeLicenseType = (event) => setLicenseType(event.target.value);
 
-  const handleDispatchError = (err) => {
-    dispatch({ type: 'FETCH_REPOSITORIES_FAIL' });
+  const [
+    handleSearch,
+    {
+      data, loading, error, fetchMore,
+    },
+  ] = useLazyQuery(searchRepositories, {
+    variables: {
+      querySearch: genSearchQuery(query, licenseType),
+      first: 20,
+    },
+    notifyOnNetworkStatusChange: true,
+  });
+
+  if (error) {
     toast({
       title: 'Error.',
-      description: err.message,
+      description: error.message,
       status: 'error',
       duration: 5000,
       isClosable: true,
     });
-  };
-  const handleChangeQuery = (event) => dispatch({ type: 'HANDLE_CHANGE_QUERY', payload: event.target.value });
-  const handleChangeLicenseType = (event) => dispatch({
-    type: 'HANDLE_CHANGE_LICENSE_TYPE',
-    payload: event.target.value,
-  });
-  const handleSearch = () => {
-    dispatch({ type: 'FETCH_REPOSITORIES' });
-    gqlQuery({
-      query: searchRepositories,
-      variables: {
-        querySearch: genSearchQuery(state.query, state.licenseType),
-        first: 20,
-      },
-    })
-      .then((response) => {
-        dispatch({
-          type: 'FETCH_REPOSITORIES_SUCCESS',
-          payload: {
-            repositories: response.search.nodes,
-            pagination: response.search.pageInfo,
-          },
-        });
-      })
-      .catch((err) => handleDispatchError(err));
-  };
+  }
 
-  const handleChangePage = (direction) => () => {
-    dispatch({ type: 'FETCH_REPOSITORIES' });
-    gqlQuery({
-      query: searchRepositories,
-      variables: {
-        querySearch: genSearchQuery(state.query, state.licenseType),
-        after: direction === 'next' ? state.pagination.endCursor : null,
-        first: direction === 'next' ? 20 : null,
-        before: direction === 'prev' ? state.pagination.startCursor : null,
-        last: direction === 'prev' ? 20 : null,
-      },
-    })
-      .then((response) => {
-        dispatch({
-          type: 'FETCH_REPOSITORIES_SUCCESS',
-          payload: {
-            repositories: response.search.nodes,
-            pagination: response.search.pageInfo,
-          },
-        });
-      })
-      .catch((err) => handleDispatchError(err));
-  };
+  const repositories = get(data, ['search', 'nodes'], []);
+  const pagination = get(data, ['search', 'pageInfo'], {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: null,
+    endCursor: null,
+  });
+
+  const handleChangePage = (direction) => () => fetchMore({
+    variables: {
+      querySearch: genSearchQuery(query, licenseType),
+      after: direction === 'next' ? pagination.endCursor : null,
+      first: direction === 'next' ? 20 : null,
+      before: direction === 'prev' ? pagination.startCursor : null,
+      last: direction === 'prev' ? 20 : null,
+    },
+    updateQuery: (_, { fetchMoreResult }) => fetchMoreResult,
+  });
 
   return (
     <Box height="100vh" display="flex" flexDirection="column">
-      <Search
-        query={state.query}
+      <SearchHeader
+        query={query}
         handleChangeQuery={handleChangeQuery}
-        licenses={state.licenses}
-        licenseType={state.licenseType}
+        licenseType={licenseType}
         handleChangeLicenseType={handleChangeLicenseType}
         handleSearch={handleSearch}
       />
-      <RepositoriesList fetch={state.fetchRepositories} repositories={state.repositories} />
+      <RepositoriesList fetch={loading} repositories={repositories} />
       <Pagination
-        hasPreviousPage={state.pagination.hasPreviousPage}
-        hasNextPage={state.pagination.hasNextPage}
+        hasPreviousPage={pagination.hasPreviousPage}
+        hasNextPage={pagination.hasNextPage}
         handleChangePage={handleChangePage}
       />
     </Box>

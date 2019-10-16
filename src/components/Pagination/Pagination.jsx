@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import { ButtonGroup, Button } from '@chakra-ui/core';
 
-const Pagination = ({ hasNextPage, hasPreviousPage, handleChangePage }) => (
+const Pagination = ({
+  hasNextPage, hasPreviousPage, handleChangePage,
+}) => (
   !hasNextPage && !hasPreviousPage
     ? null
     : (
@@ -16,11 +18,8 @@ const Pagination = ({ hasNextPage, hasPreviousPage, handleChangePage }) => (
 Pagination.propTypes = {
   hasNextPage: PropTypes.bool.isRequired,
   hasPreviousPage: PropTypes.bool.isRequired,
-  handleChangePage: PropTypes.func,
+  handleChangePage: PropTypes.func.isRequired,
 };
 
-Pagination.defaultProps = {
-  handleChangePage: () => {},
-};
 
 export default Pagination;
